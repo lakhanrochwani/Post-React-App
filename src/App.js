@@ -45,10 +45,12 @@ export default function App() {
   const [postBody, setPostBody] = useState('');
 
   useEffect(() => {
-    let filteredResults = posts.filter((post) => {
-      return post.title.includes(search);
-    });
-    console.log(filteredResults);
+    let filteredResults = posts.filter(
+      (post) =>
+        post.title.toLowerCase().includes(search.toLowerCase()) ||
+        post.body.toLowerCase().includes(search.toLowerCase())
+    );
+    setSearchResults(filteredResults.reverse());
   }, [posts, search]);
   const handleDelete = (id) => {
     let updatedPosts = posts.filter((post) => post.id !== id);
@@ -76,7 +78,7 @@ export default function App() {
       <Header title="React JS Blog" />
       <Nav search={search} setSearch={setSearch} />
       <Routes>
-        <Route path="/" element={<Home posts={posts} />} />
+        <Route path="/" element={<Home posts={searchResults} />} />
         <Route
           exact
           path="/post"
